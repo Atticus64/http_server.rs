@@ -38,12 +38,21 @@ impl Server<'_> {
                 let len = contents.len();
                 response += &data_route.1.to_string();
                 response += "\r\n";
-                let body = format!("Content-Length: {len}\r\n\r\n{contents}");
+                let body: String;
+                if contents.contains("html") {
+                    body = format!("Content-Type: text/html;charset=utf-8\r\nContent-Length: {len}\r\n\r\n{contents}");
+                } else {
+                    body = format!("Content-Length: {len}\r\n\r\n{contents}");
+                }
                 response += body.as_str();
                 stream.write_all(response.as_bytes()).unwrap();
                 break;
             }
 
+        }
+
+        if route == "/favicon.ico" {
+            return
         }
 
         let mut response: String  = String::from("HTTP/1.1 500 ");
