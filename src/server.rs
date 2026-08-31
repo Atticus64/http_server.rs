@@ -1,4 +1,3 @@
-use std::result;
 use std::{
     io::{BufReader, prelude::*},
     net::{TcpListener, TcpStream},
@@ -81,6 +80,14 @@ impl Server<'_> {
         srv
     }
 
+    pub fn get_ip(&self) -> &str {
+        self.ip
+    }
+
+    pub fn get_port(&self) -> i32 {
+        self.port
+    }
+
     pub fn create(&mut self) {
         let ip = self.ip;
         let port = self.port.to_string();
@@ -107,6 +114,7 @@ impl Server<'_> {
 
         let streaming = self.listener.as_ref();
 
+        println!("Server listening in http://{}:{}", self.get_ip(), self.get_port().to_string());
         for stream in streaming.unwrap().incoming() {
             let stream = stream.unwrap();
 
